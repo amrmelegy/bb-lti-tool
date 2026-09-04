@@ -550,47 +550,51 @@ button{font-family:inherit}
 </footer>
 
 <script>
-// ========== قراءة بيانات المقرر تلقائياً من Blackboard ==========
-(function () {
-  const p = new URLSearchParams(window.location.search);
-  const courseId    = p.get('courseId')    || '';
-  const courseLabel = p.get('courseLabel') || '';
-  const courseTitle = p.get('courseTitle') || '';
+(function(){
 
-  if (!courseId && !courseLabel && !courseTitle) return;
+  // اقرأ URL الصفحة الأم (Blackboard) من document.referrer
+  // مثال: https://psau-test.blackboard.com/ultra/courses/_72_1/outline/launchFrame?contentId=_1781094_1&...
+  const ref = document.referrer || '';
 
-  // استخرج رقماً بسيطاً من _72_1 → 72
-  function numFrom(id) {
-    const m = id.match(/_(\d+)_/);
-    return m ? m[1] : '';
+  // استخرج رقم المقرر مثل _72_1
+  const courseMatch  = ref.match(/\/courses\/(\_\d+\_\d+)\//);
+  // استخرج رقم المحتوى مثل _1781094_1
+  const contentMatch = ref.match(/contentId=(\_\d+\_\d+)/);
+
+  const courseId  = courseMatch  ? courseMatch[1]  : '';
+  const contentId = contentMatch ? contentMatch[1] : '';
+
+  // استخرج الرقم الأوسط فقط: _72_1 → 72
+  function midNum(id){
+    const m = id.match(/\_(\d+)\_/);
+    return m ? m[1] : id;
   }
 
-  const code  = courseLabel || (numFrom(courseId) ? 'CS-' + numFrom(courseId) : '');
-  const title = courseTitle;
+  // عرض رقم المقرر
+  if(courseId){
+    const num = midNum(courseId);
 
-  // عنوان الصفحة وعنوان المقرر الرئيسي
-  if (title) {
-    document.title = title;
-    const h1 = document.querySelector('.hero h1');
-    if (h1) h1.textContent = title;
-  }
-
-  // رمز المقرر تحت العنوان
-  if (code) {
-    document.querySelectorAll('.course-code').forEach(el => {
-      el.textContent = 'رمز المقرر: ' + code;
+    // تحت عنوان الهيرو
+    document.querySelectorAll('.course-code').forEach(el=>{
+      el.textContent = 'رمز المقرر: ' + courseId +
+        ' | رقم المحتوى: ' + (contentId || '—');
     });
+
+    // خلية رمز المقرر في الجدول
+    document.querySelectorAll('.info-item').forEach(item=>{
+      const lbl = item.querySelector('label');
+      const val = item.querySelector('strong');
+      if(!lbl || !val) return;
+      if(lbl.textContent.includes('رمز'))
+        val.textContent = courseId;
+    });
+
+    // ضع المعلومات في console للتحقق
+    console.log('📌 Blackboard Course ID:', courseId);
+    console.log('📌 Content ID:', contentId);
+    console.log('📌 Referrer:', ref);
   }
 
-  // خلايا جدول بيانات المقرر
-  document.querySelectorAll('.info-item').forEach(item => {
-    const lbl = item.querySelector('label');
-    const val = item.querySelector('strong');
-    if (!lbl || !val) return;
-    const t = lbl.textContent.trim();
-    if (code  && (t.includes('رمز') || t.includes('code'))) val.textContent = code;
-    if (title && (t.includes('اسم') || t.includes('name'))) val.textContent = title;
-  });
 })();
 
 function toggleDark(){
