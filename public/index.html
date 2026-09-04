@@ -562,48 +562,62 @@ button{font-family:inherit}
 <script>
 (function(){
 
-  // اقرأ URL الصفحة الأم (Blackboard) من document.referrer
-  // مثال: https://psau-test.blackboard.com/ultra/courses/_72_1/outline/launchFrame?contentId=_1781094_1&...
-  const ref = document.referrer || '';
-
-  // استخرج رقم المقرر مثل _72_1
-  const courseMatch  = ref.match(/\/courses\/(\_\d+\_\d+)\//);
-  // استخرج رقم المحتوى مثل _1781094_1
-  const contentMatch = ref.match(/contentId=(\_\d+\_\d+)/);
-
-  const courseId  = courseMatch  ? courseMatch[1]  : '';
-  const contentId = contentMatch ? contentMatch[1] : '';
-
-  // استخرج الرقم الأوسط فقط: _72_1 → 72
-  function midNum(id){
-    const m = id.match(/\_(\d+)\_/);
-    return m ? m[1] : id;
+  // جمّع كل مصادر الـ URL الممكنة
+  function getAllSources() {
+    const sources = [];
+    sources.push(window.location.href || '');
+    sources.push(document.referrer || '');
+    try { sources.push(window.parent.location.href || ''); } catch(e){}
+    try { sources.push(window.top.location.href || ''); } catch(e){}
+    // استخرج toolHref من الـ URL الحالي إن وُجد
+    const th = (window.location.href || '').match(/toolHref=([^&]+)/);
+    if(th) sources.push(decodeURIComponent(th[1]).replace(/~2F/gi,'/'));
+    return sources.join(' ');
   }
 
-  // عرض رقم المقرر
+  const allText = getAllSources();
+
+  // استخرج رقم المقرر
+  const cm  = allText.match(/\/courses\/(_\d+_\d+)\//);
+  // استخرج رقم المحتوى
+  const cnt = allText.match(/contentId=(_\d+_\d+)/);
+
+  const courseId  = cm  ? cm[1]  : '';
+  const contentId = cnt ? cnt[1] : '';
+
+  // دائماً حدّث الشريط العلوي
+  const elC = document.getElementById('bb-course-id');
+  const elN = document.getElementById('bb-content-id');
+  const elR = document.getElementById('bb-ref-raw');
+  if(elC) elC.textContent = courseId  || '—';
+  if(elN) elN.textContent = contentId || '—';
+  if(elR) elR.textContent = window.location.href.substring(0,90)+'...';
+
+  // حدّث رمز المقرر تحت العنوان
   if(courseId){
-    const num = midNum(courseId);
-
-    // تحت عنوان الهيرو
     document.querySelectorAll('.course-code').forEach(el=>{
-      el.textContent = 'رمز المقرر: ' + courseId +
-        ' | رقم المحتوى: ' + (contentId || '—');
+      el.textContent = 'رمز المقرر: ' + courseId;
     });
-
-    // خلية رمز المقرر في الجدول
     document.querySelectorAll('.info-item').forEach(item=>{
       const lbl = item.querySelector('label');
       const val = item.querySelector('strong');
-      if(!lbl || !val) return;
-      if(lbl.textContent.includes('رمز'))
-        val.textContent = courseId;
+      if(!lbl||!val) return;
+      if(lbl.textContent.includes('رمز')) val.textContent = courseId;
     });
-
-    // ضع المعلومات في console للتحقق
-    console.log('📌 Blackboard Course ID:', courseId);
-    console.log('📌 Content ID:', contentId);
-    console.log('📌 Referrer:', ref);
   }
+
+  if(contentId){
+    document.querySelectorAll('.info-item').forEach(item=>{
+      const lbl = item.querySelector('label');
+      const val = item.querySelector('strong');
+      if(!lbl||!val) return;
+      if(lbl.textContent.includes('محتوى')) val.textContent = contentId;
+    });
+  }
+
+  console.log('Sources:', allText.substring(0,200));
+  console.log('Course ID:', courseId||'EMPTY');
+  console.log('Content ID:', contentId||'EMPTY');
 
 })();
 
