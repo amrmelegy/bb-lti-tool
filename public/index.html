@@ -550,6 +550,49 @@ button{font-family:inherit}
 </footer>
 
 <script>
+// ========== قراءة بيانات المقرر تلقائياً من Blackboard ==========
+(function () {
+  const p = new URLSearchParams(window.location.search);
+  const courseId    = p.get('courseId')    || '';
+  const courseLabel = p.get('courseLabel') || '';
+  const courseTitle = p.get('courseTitle') || '';
+
+  if (!courseId && !courseLabel && !courseTitle) return;
+
+  // استخرج رقماً بسيطاً من _72_1 → 72
+  function numFrom(id) {
+    const m = id.match(/_(\d+)_/);
+    return m ? m[1] : '';
+  }
+
+  const code  = courseLabel || (numFrom(courseId) ? 'CS-' + numFrom(courseId) : '');
+  const title = courseTitle;
+
+  // عنوان الصفحة وعنوان المقرر الرئيسي
+  if (title) {
+    document.title = title;
+    const h1 = document.querySelector('.hero h1');
+    if (h1) h1.textContent = title;
+  }
+
+  // رمز المقرر تحت العنوان
+  if (code) {
+    document.querySelectorAll('.course-code').forEach(el => {
+      el.textContent = 'رمز المقرر: ' + code;
+    });
+  }
+
+  // خلايا جدول بيانات المقرر
+  document.querySelectorAll('.info-item').forEach(item => {
+    const lbl = item.querySelector('label');
+    const val = item.querySelector('strong');
+    if (!lbl || !val) return;
+    const t = lbl.textContent.trim();
+    if (code  && (t.includes('رمز') || t.includes('code'))) val.textContent = code;
+    if (title && (t.includes('اسم') || t.includes('name'))) val.textContent = title;
+  });
+})();
+
 function toggleDark(){
   const dark = document.body.dataset.dark === "1";
   if(!dark){
