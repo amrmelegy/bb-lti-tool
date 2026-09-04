@@ -1,17 +1,21 @@
 {
+  "version": 2,
+  "functions": {
+    "api/lti.js":   { "maxDuration": 10 },
+    "api/login.js": { "maxDuration": 10 }
+  },
   "headers": [
     {
       "source": "/(.*)",
       "headers": [
-        { "key": "X-Frame-Options", "value": "ALLOWALL" },
-        { "key": "Content-Security-Policy", "value": "frame-ancestors *" },
-        { "key": "Access-Control-Allow-Origin", "value": "*" },
-        { "key": "Access-Control-Allow-Methods", "value": "GET,POST,OPTIONS" }
+        { "key": "X-Frame-Options",            "value": "ALLOWALL" },
+        { "key": "Content-Security-Policy",    "value": "frame-ancestors *" },
+        { "key": "Access-Control-Allow-Origin","value": "*" }
       ]
     }
   ],
   "rewrites": [
-    { "source": "/", "destination": "/public/index.html" },
-    { "source": "/public/:path*", "destination": "/public/:path*" }
+    { "source": "/",             "destination": "/public/index.html" },
+    { "source": "/public/:path*","destination": "/public/:path*"     }
   ]
 }
