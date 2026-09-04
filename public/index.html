@@ -1,1 +1,582 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="قالب احترافي لبيانات مقرر إلكتروني">
+<title>بيانات المقرر | مقدمة في الذكاء الاصطناعي</title>
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+
+<style>
+:root{
+  --primary:#6C3DE8;
+  --primary-dark:#4f25c0;
+  --secondary:#00D4AA;
+  --accent:#FF6B35;
+  --bg:#f6f7fb;
+  --surface:#ffffff;
+  --text:#18202f;
+  --muted:#70798a;
+  --border:#e9ebf2;
+  --shadow:0 10px 35px rgba(35,31,70,.07);
+  --radius:20px;
+  --radius-sm:14px;
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:"Cairo","Tajawal",sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  line-height:1.8;
+}
+a{text-decoration:none;color:inherit}
+button{font-family:inherit}
+.container{width:min(1180px,calc(100% - 32px));margin:auto}
+
+/* Top Header */
+.topbar{
+  background:#fff;
+  border-bottom:1px solid var(--border);
+  position:sticky;
+  top:0;
+  z-index:100;
+}
+.topbar-inner{
+  height:76px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:20px;
+}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{
+  width:46px;height:46px;border-radius:14px;
+  display:grid;place-items:center;
+  color:#fff;background:linear-gradient(135deg,var(--primary),#8b6cf2);
+  box-shadow:0 8px 20px rgba(108,61,232,.22);
+}
+.logo .material-icons-round{font-size:25px}
+.brand-text strong{display:block;font-size:15px;font-weight:800}
+.brand-text span{display:block;color:var(--muted);font-size:11px}
+
+.top-actions{display:flex;align-items:center;gap:8px}
+.icon-btn{
+  width:42px;height:42px;border:1px solid var(--border);
+  border-radius:12px;background:#fff;color:var(--muted);
+  display:grid;place-items:center;cursor:pointer;transition:.2s;
+}
+.icon-btn:hover{color:var(--primary);border-color:#d9d0fb;background:#faf8ff}
+
+/* Hero */
+.hero{
+  padding:42px 0 28px;
+  background:
+    radial-gradient(circle at 10% 20%,rgba(108,61,232,.10),transparent 28%),
+    radial-gradient(circle at 90% 10%,rgba(0,212,170,.08),transparent 25%);
+}
+.breadcrumb{
+  display:flex;align-items:center;gap:7px;
+  color:var(--muted);font-size:12px;margin-bottom:22px;
+}
+.breadcrumb .material-icons-round{font-size:15px}
+.hero-card{
+  position:relative;overflow:hidden;
+  background:linear-gradient(135deg,#fff 0%,#fbfaff 100%);
+  border:1px solid #ece8fb;
+  border-radius:26px;padding:34px;
+  box-shadow:var(--shadow);
+}
+.hero-card:after{
+  content:"";
+  position:absolute;width:250px;height:250px;
+  left:-100px;bottom:-140px;border-radius:50%;
+  background:rgba(108,61,232,.07);
+}
+.course-label{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:6px 12px;border-radius:30px;
+  background:#f0ebff;color:var(--primary);
+  font-size:12px;font-weight:700;margin-bottom:15px;
+}
+.hero h1{
+  font-family:"Tajawal","Cairo",sans-serif;
+  font-size:clamp(28px,4vw,43px);
+  line-height:1.3;font-weight:800;margin-bottom:8px;
+}
+.course-code{color:var(--muted);font-size:14px;font-weight:600}
+
+.quick-stats{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  margin-top:28px;border-top:1px solid var(--border);padding-top:23px;
+}
+.quick-stat{display:flex;align-items:center;gap:12px;padding:0 18px;border-left:1px solid var(--border)}
+.quick-stat:first-child{padding-right:0}
+.quick-stat:last-child{border-left:0}
+.stat-icon{
+  width:42px;height:42px;border-radius:12px;
+  background:#f4f1ff;color:var(--primary);display:grid;place-items:center;
+}
+.stat-icon.green{background:#e9fbf7;color:#009e7f}
+.stat-icon.orange{background:#fff1ea;color:#e65b2b}
+.stat-icon.blue{background:#edf5ff;color:#3479d4}
+.quick-stat small{display:block;color:var(--muted);font-size:11px}
+.quick-stat strong{display:block;font-size:13px;margin-top:1px}
+
+/* Main */
+.main{padding:12px 0 55px}
+.layout{display:grid;grid-template-columns:1fr 340px;gap:22px}
+.content{min-width:0}
+.sidebar{min-width:0}
+
+.card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  box-shadow:0 5px 22px rgba(35,31,70,.035);
+  padding:26px;
+  margin-bottom:22px;
+}
+.section-title{
+  display:flex;align-items:center;gap:11px;
+  font-size:18px;font-weight:800;margin-bottom:20px;
+}
+.section-title .title-icon{
+  width:38px;height:38px;border-radius:11px;
+  display:grid;place-items:center;
+  color:var(--primary);background:#f1edff;
+}
+.section-title .material-icons-round{font-size:20px}
+
+/* Course info */
+.info-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+.info-item{background:#fff;padding:16px 18px}
+.info-item label{display:block;color:var(--muted);font-size:11px;margin-bottom:4px}
+.info-item strong{font-size:13px;font-weight:700}
+
+/* Professor */
+.professor{
+  display:flex;align-items:center;gap:17px;
+  padding-bottom:21px;border-bottom:1px solid var(--border);
+}
+.avatar{
+  width:78px;height:78px;border-radius:20px;
+  background:linear-gradient(135deg,#eee9ff,#d9d0ff);
+  color:var(--primary);display:grid;place-items:center;
+  font-size:28px;font-weight:800;flex:none;
+}
+.professor h3{font-size:17px;font-weight:800}
+.professor .role{font-size:12px;color:var(--muted)}
+.contact-list{margin-top:19px;display:grid;gap:10px}
+.contact-item{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 12px;background:#fafbfe;border-radius:11px;
+  font-size:12px;
+}
+.contact-item .material-icons-round{font-size:18px;color:var(--primary)}
+.office-hours{
+  margin-top:16px;padding:12px 14px;border-radius:12px;
+  background:#effbf8;color:#087e69;font-size:12px;
+  display:flex;gap:8px;align-items:center;
+}
+
+/* Description */
+.description{font-size:13px;color:#515b6d;line-height:2.1}
+
+/* Outcomes */
+.outcomes{display:grid;gap:10px}
+.outcome{
+  display:flex;gap:12px;align-items:flex-start;
+  padding:13px 14px;border:1px solid var(--border);border-radius:13px;
+}
+.outcome-number{
+  width:28px;height:28px;border-radius:9px;
+  display:grid;place-items:center;flex:none;
+  background:#f1edff;color:var(--primary);
+  font-size:11px;font-weight:800;
+}
+.outcome p{font-size:12px;color:#515b6d;padding-top:2px}
+
+/* Units */
+.units{display:grid;gap:10px}
+.unit{
+  display:grid;grid-template-columns:42px 1fr auto;align-items:center;
+  gap:13px;padding:14px;border:1px solid var(--border);
+  border-radius:14px;transition:.2s;
+}
+.unit:hover{border-color:#d9d0fb;transform:translateY(-1px)}
+.unit-number{
+  width:40px;height:40px;border-radius:11px;
+  display:grid;place-items:center;background:#f4f1ff;
+  color:var(--primary);font-weight:800;font-size:12px;
+}
+.unit h4{font-size:13px}
+.unit p{font-size:11px;color:var(--muted)}
+.percent{font-size:12px;font-weight:800;color:var(--primary)}
+.progress{height:5px;background:#eeeef4;border-radius:5px;margin-top:7px;overflow:hidden}
+.progress span{display:block;height:100%;background:linear-gradient(90deg,var(--primary),#9c83ef);border-radius:inherit}
+
+/* Assessment */
+.assessment{display:grid;gap:10px}
+.assess-row{
+  display:grid;grid-template-columns:1fr 100px;
+  align-items:center;gap:15px;
+}
+.assess-label{font-size:12px;font-weight:600}
+.bar{height:9px;background:#eeeef4;border-radius:20px;overflow:hidden}
+.bar span{display:block;height:100%;border-radius:20px;background:var(--secondary)}
+.assess-value{text-align:left;font-size:12px;font-weight:800;color:#087e69}
+
+/* Sidebar */
+.sticky{position:sticky;top:98px}
+.side-title{font-size:14px;font-weight:800;margin-bottom:16px}
+.nav-list{display:grid;gap:5px}
+.nav-list a{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 11px;border-radius:11px;
+  color:#667083;font-size:12px;transition:.2s;
+}
+.nav-list a:hover,.nav-list a.active{background:#f3efff;color:var(--primary);font-weight:700}
+.nav-list .material-icons-round{font-size:18px}
+
+.semester{
+  padding:17px;border-radius:14px;
+  background:linear-gradient(135deg,#f3efff,#fbfaff);
+  border:1px solid #e7e0ff;
+}
+.semester small{font-size:10px;color:var(--muted)}
+.semester strong{display:block;font-size:15px;margin-top:2px}
+
+.ref-list{display:grid;gap:11px}
+.ref{display:flex;gap:10px;font-size:11px;color:#5e6879}
+.ref .material-icons-round{font-size:17px;color:var(--secondary);flex:none}
+
+.footer{
+  background:#17142a;color:#aaa4bc;
+  padding:27px 0;font-size:11px;
+}
+.footer-inner{display:flex;justify-content:space-between;gap:20px;align-items:center}
+.footer strong{color:#fff}
+
+/* Responsive */
+@media(max-width:900px){
+  .layout{grid-template-columns:1fr}
+  .sticky{position:static}
+  .sidebar{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+  .sidebar .card{margin-bottom:0}
+}
+@media(max-width:680px){
+  .container{width:min(100% - 22px,1180px)}
+  .topbar-inner{height:68px}
+  .brand-text span{display:none}
+  .hero{padding-top:25px}
+  .hero-card{padding:23px 18px;border-radius:20px}
+  .quick-stats{grid-template-columns:repeat(2,1fr);gap:18px 0}
+  .quick-stat{border-left:0;padding:0!important}
+  .quick-stat:nth-child(odd){border-left:1px solid var(--border)}
+  .info-grid{grid-template-columns:1fr}
+  .card{padding:20px;border-radius:17px}
+  .sidebar{grid-template-columns:1fr}
+  .unit{grid-template-columns:40px 1fr}
+  .percent{display:none}
+  .assess-row{grid-template-columns:1fr 60px}
+  .footer-inner{flex-direction:column;text-align:center}
+}
+@media print{
+  .topbar{position:static}
+  .top-actions,.sidebar{display:none}
+  .layout{grid-template-columns:1fr}
+  .hero-card,.card{box-shadow:none}
+  body{background:#fff}
+}
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+  <div class="container topbar-inner">
+    <a class="brand" href="#">
+      <div class="logo"><span class="material-icons-round">school</span></div>
+      <div class="brand-text">
+        <strong>جامعة المعرفة</strong>
+        <span>كلية الحوسبة والمعلومات</span>
+      </div>
+    </a>
+
+    <div class="top-actions">
+      <button class="icon-btn" title="طباعة" onclick="window.print()">
+        <span class="material-icons-round">print</span>
+      </button>
+      <button class="icon-btn" title="الوضع الداكن" onclick="toggleDark()">
+        <span class="material-icons-round">dark_mode</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container">
+    <div class="breadcrumb">
+      <span>المقررات الإلكترونية</span>
+      <span class="material-icons-round">chevron_left</span>
+      <span>كلية الحوسبة والمعلومات</span>
+      <span class="material-icons-round">chevron_left</span>
+      <span>بيانات المقرر</span>
+    </div>
+
+    <div class="hero-card">
+      <div class="course-label">
+        <span class="material-icons-round" style="font-size:15px">menu_book</span>
+        مقرر إلكتروني
+      </div>
+
+      <h1>مقدمة في الذكاء الاصطناعي</h1>
+      <div class="course-code">رمز المقرر: CS-401</div>
+
+      <div class="quick-stats">
+        <div class="quick-stat">
+          <div class="stat-icon"><span class="material-icons-round">business</span></div>
+          <div><small>الكلية</small><strong>الحوسبة والمعلومات</strong></div>
+        </div>
+        <div class="quick-stat">
+          <div class="stat-icon green"><span class="material-icons-round">account_tree</span></div>
+          <div><small>القسم</small><strong>علوم الحاسب</strong></div>
+        </div>
+        <div class="quick-stat">
+          <div class="stat-icon orange"><span class="material-icons-round">schedule</span></div>
+          <div><small>الساعات المعتمدة</small><strong>3 ساعات</strong></div>
+        </div>
+        <div class="quick-stat">
+          <div class="stat-icon blue"><span class="material-icons-round">school</span></div>
+          <div><small>المستوى</small><strong>المستوى الرابع</strong></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<main class="main">
+  <div class="container layout">
+
+    <div class="content">
+
+      <section class="card" id="info">
+        <div class="section-title">
+          <div class="title-icon"><span class="material-icons-round">info</span></div>
+          بيانات المقرر
+        </div>
+
+        <div class="info-grid">
+          <div class="info-item"><label>اسم المقرر</label><strong>مقدمة في الذكاء الاصطناعي</strong></div>
+          <div class="info-item"><label>رمز المقرر</label><strong>CS-401</strong></div>
+          <div class="info-item"><label>الكلية</label><strong>كلية الحوسبة والمعلومات</strong></div>
+          <div class="info-item"><label>القسم</label><strong>قسم علوم الحاسب</strong></div>
+          <div class="info-item"><label>البرنامج الأكاديمي</label><strong>بكالوريوس علوم الحاسب</strong></div>
+          <div class="info-item"><label>المستوى الدراسي</label><strong>المستوى الرابع</strong></div>
+          <div class="info-item"><label>الفصل الدراسي</label><strong>الفصل الدراسي الأول 2026 / 2027</strong></div>
+          <div class="info-item"><label>عدد الساعات</label><strong>3 ساعات معتمدة</strong></div>
+        </div>
+      </section>
+
+      <section class="card" id="professor">
+        <div class="section-title">
+          <div class="title-icon"><span class="material-icons-round">person</span></div>
+          أستاذ المقرر
+        </div>
+
+        <div class="professor">
+          <div class="avatar">أم</div>
+          <div>
+            <h3>د. أحمد محمد</h3>
+            <div class="role">أستاذ مساعد – قسم علوم الحاسب</div>
+            <div class="role">كلية الحوسبة والمعلومات</div>
+          </div>
+        </div>
+
+        <div class="contact-list">
+          <div class="contact-item">
+            <span class="material-icons-round">mail</span>
+            <span>ahmed.mohamed@university.edu</span>
+          </div>
+          <div class="contact-item">
+            <span class="material-icons-round">location_on</span>
+            <span>مكتب 214 – مبنى كلية الحوسبة</span>
+          </div>
+          <div class="contact-item">
+            <span class="material-icons-round">phone</span>
+            <span>+20 100 000 0000</span>
+          </div>
+        </div>
+
+        <div class="office-hours">
+          <span class="material-icons-round">access_time</span>
+          <strong>الساعات المكتبية:</strong> الأحد والثلاثاء، 10:00 – 12:00
+        </div>
+      </section>
+
+      <section class="card" id="description">
+        <div class="section-title">
+          <div class="title-icon"><span class="material-icons-round">description</span></div>
+          وصف المقرر
+        </div>
+        <p class="description">
+          يقدم هذا المقرر مدخلًا شاملًا إلى المفاهيم الأساسية للذكاء الاصطناعي،
+          مع التركيز على طرق تمثيل المعرفة والبحث وحل المشكلات والتعلم الآلي.
+          ويتضمن المقرر تطبيقات عملية تساعد الطالب على فهم كيفية استخدام تقنيات
+          الذكاء الاصطناعي في حل المشكلات الواقعية وبناء أنظمة ذكية.
+        </p>
+      </section>
+
+      <section class="card" id="outcomes">
+        <div class="section-title">
+          <div class="title-icon"><span class="material-icons-round">emoji_objects</span></div>
+          مخرجات التعلم
+        </div>
+
+        <div class="outcomes">
+          <div class="outcome"><div class="outcome-number">01</div><p>شرح المفاهيم والمبادئ الأساسية للذكاء الاصطناعي وتطبيقاته.</p></div>
+          <div class="outcome"><div class="outcome-number">02</div><p>تحليل المشكلات واختيار خوارزميات البحث المناسبة لحلها.</p></div>
+          <div class="outcome"><div class="outcome-number">03</div><p>تطبيق مبادئ التعلم الآلي في بناء حلول لمشكلات عملية.</p></div>
+          <div class="outcome"><div class="outcome-number">04</div><p>تقييم نتائج الأنظمة الذكية ومناقشة مزاياها وحدودها.</p></div>
+        </div>
+      </section>
+
+      <section class="card" id="units">
+        <div class="section-title">
+          <div class="title-icon"><span class="material-icons-round">view_list</span></div>
+          محتوى المقرر
+        </div>
+
+        <div class="units">
+          <div class="unit">
+            <div class="unit-number">01</div>
+            <div><h4>مقدمة إلى الذكاء الاصطناعي</h4><p>المفاهيم الأساسية، التاريخ والتطبيقات</p><div class="progress"><span style="width:100%"></span></div></div>
+            <div class="percent">20%</div>
+          </div>
+          <div class="unit">
+            <div class="unit-number">02</div>
+            <div><h4>تمثيل المعرفة والبحث</h4><p>طرق التمثيل وخوارزميات البحث</p><div class="progress"><span style="width:75%"></span></div></div>
+            <div class="percent">25%</div>
+          </div>
+          <div class="unit">
+            <div class="unit-number">03</div>
+            <div><h4>التعلم الآلي</h4><p>التعلم الموجه وغير الموجه</p><div class="progress"><span style="width:50%"></span></div></div>
+            <div class="percent">30%</div>
+          </div>
+          <div class="unit">
+            <div class="unit-number">04</div>
+            <div><h4>التطبيقات والاتجاهات الحديثة</h4><p>الذكاء التوليدي والتطبيقات الذكية</p><div class="progress"><span style="width:25%"></span></div></div>
+            <div class="percent">25%</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card" id="assessment">
+        <div class="section-title">
+          <div class="title-icon"><span class="material-icons-round">assessment</span></div>
+          أساليب التقييم
+        </div>
+
+        <div class="assessment">
+          <div class="assess-row"><div><div class="assess-label">الاختبارات القصيرة والأنشطة</div><div class="bar"><span style="width:15%"></span></div></div><div class="assess-value">15%</div></div>
+          <div class="assess-row"><div><div class="assess-label">المشروع العملي</div><div class="bar"><span style="width:25%"></span></div></div><div class="assess-value">25%</div></div>
+          <div class="assess-row"><div><div class="assess-label">اختبار منتصف الفصل</div><div class="bar"><span style="width:20%"></span></div></div><div class="assess-value">20%</div></div>
+          <div class="assess-row"><div><div class="assess-label">الاختبار النهائي</div><div class="bar"><span style="width:40%"></span></div></div><div class="assess-value">40%</div></div>
+        </div>
+      </section>
+
+      <section class="card" id="references">
+        <div class="section-title">
+          <div class="title-icon"><span class="material-icons-round">library_books</span></div>
+          المراجع والمصادر
+        </div>
+
+        <div class="ref-list">
+          <div class="ref"><span class="material-icons-round">check_circle</span><span>Artificial Intelligence: A Modern Approach – Russell & Norvig.</span></div>
+          <div class="ref"><span class="material-icons-round">check_circle</span><span>مادة المقرر والوحدات التعليمية الإلكترونية.</span></div>
+          <div class="ref"><span class="material-icons-round">check_circle</span><span>مصادر ومقالات علمية مختارة من قواعد البيانات الأكاديمية.</span></div>
+        </div>
+      </section>
+
+    </div>
+
+    <aside class="sidebar">
+      <div class="card sticky">
+        <div class="side-title">التنقل داخل الصفحة</div>
+        <nav class="nav-list">
+          <a class="active" href="#info"><span class="material-icons-round">info</span> بيانات المقرر</a>
+          <a href="#professor"><span class="material-icons-round">person</span> أستاذ المقرر</a>
+          <a href="#description"><span class="material-icons-round">description</span> وصف المقرر</a>
+          <a href="#outcomes"><span class="material-icons-round">emoji_objects</span> مخرجات التعلم</a>
+          <a href="#units"><span class="material-icons-round">view_list</span> محتوى المقرر</a>
+          <a href="#assessment"><span class="material-icons-round">assessment</span> التقييم</a>
+          <a href="#references"><span class="material-icons-round">library_books</span> المراجع</a>
+        </nav>
+      </div>
+
+      <div class="card">
+        <div class="side-title">الفصل الدراسي</div>
+        <div class="semester">
+          <small>العام الأكاديمي</small>
+          <strong>2026 / 2027</strong>
+          <small>الفصل الدراسي الأول</small>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="side-title">معلومات إضافية</div>
+        <div class="ref-list">
+          <div class="ref"><span class="material-icons-round">language</span><span>لغة التدريس: العربية</span></div>
+          <div class="ref"><span class="material-icons-round">laptop_mac</span><span>نمط الدراسة: إلكتروني</span></div>
+          <div class="ref"><span class="material-icons-round">update</span><span>آخر تحديث: سبتمبر 2026</span></div>
+        </div>
+      </div>
+    </aside>
+
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="container footer-inner">
+    <div><strong>جامعة المعرفة</strong> — نظام المقررات الإلكترونية</div>
+    <div>جميع الحقوق محفوظة © 2026</div>
+  </div>
+</footer>
+
+<script>
+function toggleDark(){
+  const dark = document.body.dataset.dark === "1";
+  if(!dark){
+    document.body.dataset.dark="1";
+    document.documentElement.style.setProperty("--bg","#10111a");
+    document.documentElement.style.setProperty("--surface","#181a26");
+    document.documentElement.style.setProperty("--text","#f4f4f7");
+    document.documentElement.style.setProperty("--muted","#a4a7b5");
+    document.documentElement.style.setProperty("--border","#292c3a");
+  }else{
+    document.body.dataset.dark="0";
+    document.documentElement.style.setProperty("--bg","#f6f7fb");
+    document.documentElement.style.setProperty("--surface","#ffffff");
+    document.documentElement.style.setProperty("--text","#18202f");
+    document.documentElement.style.setProperty("--muted","#70798a");
+    document.documentElement.style.setProperty("--border","#e9ebf2");
+  }
+}
+
+const links = document.querySelectorAll(".nav-list a");
+links.forEach(link=>{
+  link.addEventListener("click",()=>{
+    links.forEach(x=>x.classList.remove("active"));
+    link.classList.add("active");
+  });
+});
+</script>
+
+</body>
+</html>
