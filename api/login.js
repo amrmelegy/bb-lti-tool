@@ -1,23 +1,15 @@
-const { randomBytes } = require('crypto');
-
-const CLIENT_ID   = 'cef109ef-b32c-471b-9d4a-aebe2ebe3262';
-const BB_AUTH_URL = 'https://psau-test.blackboard.com/api/v1/lti/1.3/authorization/';
-
 module.exports = function handler(req, res) {
-  const p = req.method === 'POST' ? req.body : req.query;
+  res.setHeader('X-Frame-Options', 'ALLOWALL');
+  res.setHeader('Content-Security-Policy', 'frame-ancestors *');
+  
   const host = req.headers['x-forwarded-host'] || req.headers.host;
-
-  const url = new URL(BB_AUTH_URL);
-  url.searchParams.set('scope',            'openid');
-  url.searchParams.set('response_type',    'id_token');
-  url.searchParams.set('response_mode',    'form_post');
-  url.searchParams.set('prompt',           'none');
-  url.searchParams.set('client_id',        CLIENT_ID);
-  url.searchParams.set('redirect_uri',     `https://${host}/api/lti`);
-  url.searchParams.set('login_hint',       p.login_hint       || '');
-  url.searchParams.set('lti_message_hint', p.lti_message_hint || '');
-  url.searchParams.set('state',            randomBytes(16).toString('hex'));
-  url.searchParams.set('nonce',            randomBytes(16).toString('hex'));
-
-  res.redirect(302, url.toString());
+  
+  res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
+  res.end(`<!DOCTYPE html>
+<html><head><meta charset="UTF-8">
+<style>*{margin:0;padding:0}html,body{width:100%;height:100%;overflow:hidden}
+iframe{width:100%;height:100vh;border:none;display:block}</style>
+</head><body>
+<iframe src="https://${host}/public/index.html" allowfullscreen></iframe>
+</body></html>`);
 };
